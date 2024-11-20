@@ -122,12 +122,18 @@ img = get_img_as_base64("wallpaperflare.com_wallpaper.jpg")
 
 page_bg_img = f"""
 <style>
-[data-testid="stAppViewContainer"] > div:first-child {{
-background-image: url("data:image/png;base64,{img}");
+[data-testid="stAppViewContainer"] {{
+background-image: url("data:image/png;base64,{img}");;
 background-position: center; 
 background-repeat: no-repeat;
 background-attachment: fixed;
 }}
+
+h1 {{
+        color: red;
+    }}
+    </style>
+
 </style>
 """
 
@@ -136,7 +142,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
 # st.header('Proyek Data Analisis :sparkles:')
-st.caption('Created byy: ')
+st.caption('Created byty: ')
 
 with st.sidebar:
     
