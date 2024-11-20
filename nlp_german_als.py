@@ -2,23 +2,8 @@ import re
 import spacy
 import pandas as pd
 import streamlit as st
-
-teks = "abber als sdfjkdf"
-
-# # Unggah file
-# uploaded = files.upload()
-
-# # Menampilkan nama file yang diunggah
-# for file_name in uploaded.keys():
-#     print(f"File yang diunggah: {file_name}")
-#     file_name = file_name
-
-# # Membuka file dan membaca isinya
-# with open(file_name, 'r', encoding='utf-8') as file:
-#     teks = file.read()
-
-# with open(file_name, 'r', encoding='utf-8') as file:
-#     teks = ''.join(line.strip() + ' ' for line in file).strip()
+from io import BytesIO
+import xlsxwriter 
 
 # Load spaCy model untuk analisis tata bahasa
 nlp = spacy.load("de_core_news_sm")
@@ -46,7 +31,7 @@ def deteksi_perbandingan(teks):
 
     if kalimat_perbandingan == []:
 
-        return "Tidak ada kalimat perbandingan pada teks"
+        return kalimat_perbandingan.append("Tidak ada kalimat perbandingan pada teks")
 
     else:
 
@@ -76,7 +61,7 @@ def deteksi_lampau(teks):
 
     if kalimat_lampau == []:
 
-        return "Tidak ada kalimat lampau pada teks"
+        return kalimat_lampau.append("Tidak ada kalimat lampau pada teks")
 
     else:
 
@@ -113,4 +98,83 @@ def df_to_excel(df_main):
 
     df_main.to_excel('Hasil deteksi.xlsx')
 
-st.sidebar()
+with st.sidebar:
+    
+    st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
+    # Menambahkan logo perusahaan
+    st.image("https://learn.g2.com/hubfs/Imported%20sitepage%20images/1ZB5giUShe0gw9a6L69qAgsd7wKTQ60ZRoJC5Xq3BIXS517sL6i6mnkAN9khqnaIGzE6FASAusRr7w=w1439-h786.png")
+
+st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
+# st.header('Proyek Data Analisis :sparkles:')
+st.caption('Created by: Frau Devita Pratiwi')
+
+# Kotak kosong buat diisi
+teks_langsung = st.text_input("Masukkan teks:")
+placeholder_langsung = st.empty()
+placeholder_langsung_2 = st.empty()
+
+# Upload file
+uploaded_file = st.file_uploader("Pilih file .txt", type="txt")
+placeholder_file = st.empty()
+
+# Kalau ada dile yang di upload
+if uploaded_file is not None:
+
+    # Membuka file dan membaca isinya
+    teks_dari_txt = ''.join(
+        line.strip() + ' ' for line in uploaded_file.read().decode('utf-8').splitlines()).strip()
+
+    df_main = get_data_frame(teks_dari_txt)
+    placeholder_file.write(df_main)
+
+    # Menyimpan DataFrame ke file Excel dalam memori
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df_main.to_excel(writer, index=False, sheet_name='Sheet1')
+        # writer.save()
+
+    # Mendapatkan data file Excel
+    excel_data = output.getvalue()
+
+    # Tombol untuk mengunduh file Excel
+    placeholder_file.download_button(
+        label="Download File Excel",
+        data=excel_data,
+        file_name="Hasil deteksi.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+else:
+    st.write("Belum ada file yang diunggah.")
+
+if teks_langsung == '':
+
+    placeholder_langsung.empty()
+
+else:
+
+    df_main = get_data_frame(teks_langsung)
+    placeholder_langsung.dataframe(df_main)
+
+    # Menyimpan DataFrame ke file Excel dalam memori
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df_main.to_excel(writer, index=False, sheet_name='Sheet1')
+        # writer.save()
+
+    # Mendapatkan data file Excel
+    excel_data = output.getvalue()
+
+    # Tombol untuk mengunduh file Excel
+    placeholder_langsung_2.download_button(
+        label="Download File Excel",
+        data=excel_data,
+        file_name="Hasil deteksi.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+
+if st.button("Hapus Semua Output"):
+    placeholder_langsung.empty()
+    placeholder_file.empty()
+    placeholder_langsung_2.empty()
