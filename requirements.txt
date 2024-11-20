@@ -1,3 +1,6 @@
 regex
 spacy
 pandas
+streamlit
+https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.8.0/de_core_news_sm-3.8.0.tar.gz
+openpyxl==3.1.5

@@ -1,6 +1,7 @@
 import re
 import spacy
 import pandas as pd
+import streamlit as st
 
 teks = "abber als sdfjkdf"
 
@@ -101,9 +102,16 @@ def program_utama(teks):
 
     return a, b
 
-hasil = {'kalimat_perbandingan' : program_utama(teks)[0], 'kalimat_lampau' : program_utama(teks)[1]}
+def get_data_frame(teks):
 
-df_main = pd.DataFrame(data = hasil)
+    hasil = {'kalimat_perbandingan' : program_utama(teks)[0], 'kalimat_lampau' : program_utama(teks)[1]}
 
-df_main.to_excel('Hasil deteksi.xlsx')
-df_main
+    df_main = pd.DataFrame(data = hasil)
+
+    return df_main
+
+def df_to_excel(df_main):
+
+    df_main.to_excel('Hasil deteksi.xlsx')
+
+st.sidebar()
