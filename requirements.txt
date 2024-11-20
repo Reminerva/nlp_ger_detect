@@ -1,4 +1,3 @@
-re
+regex
 spacy
-google.colab
 pandas
