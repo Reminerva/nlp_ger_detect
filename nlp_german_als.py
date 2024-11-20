@@ -52,7 +52,6 @@ def deteksi_perbandingan(teks):
 
         return (kalimat_perbandingan)
 
-
 # Fungsi untuk mendeteksi kalimat lampau
 def deteksi_lampau(teks):
 
