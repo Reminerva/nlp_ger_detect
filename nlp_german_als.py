@@ -173,7 +173,6 @@ else:
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 
-
 if st.button("Hapus Semua Output"):
     placeholder_langsung.empty()
     placeholder_file.empty()
