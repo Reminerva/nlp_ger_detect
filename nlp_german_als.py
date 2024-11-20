@@ -129,11 +129,6 @@ background-repeat: no-repeat;
 background-attachment: fixed;
 }}
 
-h1 {{
-        color: red;
-    }}
-    </style>
-
 </style>
 """
 
