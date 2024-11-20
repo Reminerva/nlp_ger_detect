@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 from io import BytesIO
 import xlsxwriter 
+import base64
 
 # Load spaCy model untuk analisis tata bahasa
 nlp = spacy.load("de_core_news_sm")
@@ -15,27 +16,39 @@ def deteksi_perbandingan(teks):
 
     corpus = nlp(teks)
     kalimat_perbandingan = []
-    pola_komparatif = []
 
     for kalimat in corpus.sents: # Iterasi setiap kalimat
-
-        pola_komparatif.append(re.findall(r'\w+er als ', kalimat.text.lower())) # Pola Komparativ + als
-        pola_komparatif.append(re.findall(r'mehr \w+ als ', kalimat.text.lower())) # Pola Mehr + Komparativ + als
-
-
-        if pola_komparatif != [[],[]]: # Periksa apakah ada Pola Komparativ
-
-            kalimat_perbandingan.append(kalimat.text)
-
+        
         pola_komparatif = []
 
+        # pola_komparatif.append(re.findall(r'\w+er als ', kalimat.text.lower())) # Pola Komparativ + als
+        # pola_komparatif.append(re.findall(r'mehr \w+ als ', kalimat.text.lower())) # Pola Mehr + Komparativ + als
+
+        if 'als ' in kalimat.text.lower(): # Periksa apakah ada 'als
+
+            for i, token in enumerate(kalimat): # Iterasi setiap token dalam kalimat
+
+                if token.text == 'als' and kalimat[i-1].tag_ == "ADJD":
+
+                    pola_komparatif.append(token)
+
+                if token.text == 'als' and kalimat[i-2].text == 'mehr':
+
+                    pola_komparatif.append(token)
+
+            if len(pola_komparatif) > 0: # Pastikan ada pola komparatif
+
+                kalimat_perbandingan.append(kalimat.text)
+
     if kalimat_perbandingan == []:
+        
+        kalimat_perbandingan.append("Tidak ada kalimat perbandingan pada teks")
 
-        return kalimat_perbandingan.append("Tidak ada kalimat perbandingan pada teks")
-
+        return kalimat_perbandingan
+    
     else:
 
-        return (kalimat_perbandingan)
+        return list(set(kalimat_perbandingan))
 
 # Fungsi untuk mendeteksi kalimat lampau
 def deteksi_lampau(teks):
@@ -60,12 +73,14 @@ def deteksi_lampau(teks):
                 kalimat_lampau.append(kalimat.text)
 
     if kalimat_lampau == []:
+        
+        kalimat_lampau.append("Tidak ada kalimat lampau pada teks")
 
-        return kalimat_lampau.append("Tidak ada kalimat lampau pada teks")
-
+        return kalimat_lampau
+    
     else:
 
-        return (kalimat_lampau)
+        return list(set(kalimat_lampau))
 
 def program_utama(teks):
 
@@ -98,15 +113,36 @@ def df_to_excel(df_main):
 
     df_main.to_excel('Hasil deteksi.xlsx')
 
+def get_img_as_base64(file):
+    with open(file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+img = get_img_as_base64("wallpaperflare.com_wallpaper.jpg")
+
+page_bg_img = f"""
+<style>
+[data-testid="stAppViewContainer"] > div:first-child {{
+background-image: url("data:image/png;base64,{img}");
+background-position: center; 
+background-repeat: no-repeat;
+background-attachment: fixed;
+}}
+</style>
+"""
+
+st.markdown(page_bg_img, unsafe_allow_html=True)
+
+
+st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
+# st.header('Proyek Data Analisis :sparkles:')
+st.caption('Created byy: ')
+
 with st.sidebar:
     
     st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
     # Menambahkan logo perusahaan
     st.image("https://learn.g2.com/hubfs/Imported%20sitepage%20images/1ZB5giUShe0gw9a6L69qAgsd7wKTQ60ZRoJC5Xq3BIXS517sL6i6mnkAN9khqnaIGzE6FASAusRr7w=w1439-h786.png")
-
-st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
-# st.header('Proyek Data Analisis :sparkles:')
-st.caption('Created by: Frau Devita Pratiwi')
 
 # Kotak kosong buat diisi
 teks_langsung = st.text_input("Masukkan teks:")
