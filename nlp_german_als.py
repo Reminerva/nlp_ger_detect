@@ -2,7 +2,7 @@ import re
 import spacy
 import pandas as pd
 
-teks = "abberfals sdfjkdf"
+teks = "abber als sdfjkdf"
 
 # # Unggah file
 # uploaded = files.upload()
