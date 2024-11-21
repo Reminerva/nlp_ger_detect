@@ -120,10 +120,23 @@ def get_img_as_base64(file):
 
 img = get_img_as_base64("wallpaperflare.com_wallpaper.jpg")
 
+# page_bg_img = f"""
+# <style>
+
+# [data-testid="stAppViewContainer"] {{
+# background-image: url("data:image/png;base64,{img}");
+# background-position: center; 
+# background-repeat: no-repeat;
+# background-attachment: fixed;
+# }}
+
+# </style>
+# """
 page_bg_img = f"""
 <style>
+
 [data-testid="stAppViewContainer"] {{
-background-image: url("data:image/png;base64,{img}");;
+background-color: white;
 background-position: center; 
 background-repeat: no-repeat;
 background-attachment: fixed;
@@ -137,13 +150,13 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
 # st.header('Proyek Data Analisis :sparkles:')
-st.caption('Created byty: ')
+st.caption('Created by: ')
 
 with st.sidebar:
     
     st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
     # Menambahkan logo perusahaan
-    st.image("https://learn.g2.com/hubfs/Imported%20sitepage%20images/1ZB5giUShe0gw9a6L69qAgsd7wKTQ60ZRoJC5Xq3BIXS517sL6i6mnkAN9khqnaIGzE6FASAusRr7w=w1439-h786.png")
+    # st.image("https://learn.g2.com/hubfs/Imported%20sitepage%20images/1ZB5giUShe0gw9a6L69qAgsd7wKTQ60ZRoJC5Xq3BIXS517sL6i6mnkAN9khqnaIGzE6FASAusRr7w=w1439-h786.png")
 
 # Kotak kosong buat diisi
 teks_langsung = st.text_input("Masukkan teks:")
