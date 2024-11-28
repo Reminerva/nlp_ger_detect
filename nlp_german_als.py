@@ -27,12 +27,16 @@ def deteksi_perbandingan(teks):
         if 'als ' in kalimat.text.lower(): # Periksa apakah ada 'als
 
             for i, token in enumerate(kalimat): # Iterasi setiap token dalam kalimat
-
-                if token.text == 'als' and kalimat[i-1].tag_ == "ADJD":
+                
+                if token.text == 'als' and "Cmp" in kalimat[i-1].morph.get("Degree"): # POLA kata komparativ + als
 
                     pola_komparatif.append(token)
 
-                if token.text == 'als' and kalimat[i-2].text == 'mehr':
+                elif token.text == 'als' and kalimat[i-2].text == 'mehr': # POLA mehr + 1 kata (bebas) + als
+
+                    pola_komparatif.append(token)
+
+                elif token.text == 'als' and kalimat[i-2].tag_ == "ADV": # POLA Adverbia + 1 kata (bebas) + als
 
                     pola_komparatif.append(token)
 
