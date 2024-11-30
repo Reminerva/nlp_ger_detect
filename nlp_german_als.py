@@ -132,8 +132,8 @@ def get_img_as_base64(file):
 
 
 
-# CODE UNTUK TAMPILAN WEB (USER INTERFACE)
 
+# CODE UNTUK TAMPILAN WEB (USER INTERFACE)
 
 img = get_img_as_base64("foto.jpg")
 
@@ -181,26 +181,25 @@ placeholder_langsung = st.empty()
 placeholder_langsung_2 = st.empty()
 
 # Upload file
-uploaded_file = st.file_uploader("Pilih file .txt", type=["pdf","txt"])
+uploaded_file = st.file_uploader("Pilih file .txt", type=["txt"])
 placeholder_file = st.empty()
 
 # Kalau ada dile yang di upload
+df_main = ""
+teks_dari_file = ""
 if uploaded_file is not None:
 
     try:
 
-        if uploaded_file.type == "application/txt": ### READ FILE TXT
+        if uploaded_file.type == "/txt": ### READ FILE TXT
 
             # Membuka file dan membaca isinya
-            teks_dari_txt = ''.join(
+            teks_dari_file = ''.join(
                 line.strip() + ' ' for line in uploaded_file.read().decode('utf-8').splitlines()).strip()
 
-            df_main = get_data_frame(teks_dari_txt)
-            placeholder_file.write(df_main)
-
-        elif uploaded_file.type == "application/pdf": ### READ FILE TXT
+        elif uploaded_file.type == "/pdf": ### READ FILE TXT
             
-            teks_dari_pdf =""
+            teks_dari_file =""
 
             with pdfplumber.open(uploaded_file) as pdf:
                 num_pages = len(pdf.pages)
@@ -209,35 +208,35 @@ if uploaded_file is not None:
             for page_num, page in enumerate(pdf.pages):
                 text = page.extract_text()
 
-                teks_dari_pdf = teks_dari_pdf + text
-
-            df_main = get_data_frame(teks_dari_pdf)
-            placeholder_file.write(df_main)
+                teks_dari_file = teks_dari_file + text
 
                 # st.subheader(f"Page {page_num + 1}")
                 # st.text(text)
 
-        # Menyimpan DataFrame ke file Excel dalam memori
-        output = BytesIO()
-        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-            df_main.to_excel(writer, index=False, sheet_name='Sheet1')
-            # writer.save()
-
-        # Mendapatkan data file Excel
-        excel_data = output.getvalue()
-
-        # Tombol untuk mengunduh file Excel
-        placeholder_file.download_button(
-            label="Download File Excel",
-            data=excel_data,
-            file_name="Hasil deteksi.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        )
-
-
     except Exception as e:
 
         st.error(f"Error reading the PDF file: {e}")
+
+
+    df_main = get_data_frame(teks_dari_file)
+    placeholder_file.write(df_main)
+    
+    # Menyimpan DataFrame ke file Excel dalam memori
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df_main.to_excel(writer, index=False, sheet_name='Sheet1')
+        # writer.save()
+
+    # Mendapatkan data file Excel
+    excel_data = output.getvalue()
+
+    # Tombol untuk mengunduh file Excel
+    placeholder_file.download_button(
+        label="Download File Excel",
+        data=excel_data,
+        file_name="Hasil deteksi.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 else:
     st.write("Belum ada file yang diunggah.")
