@@ -181,46 +181,50 @@ placeholder_langsung = st.empty()
 placeholder_langsung_2 = st.empty()
 
 # Upload file
-uploaded_file = st.file_uploader("Pilih file .txt", type=["txt"])
+uploaded_file = st.file_uploader("Pilih file .txt", type=["txt","pdf"])
 placeholder_file = st.empty()
+placeholder_file_teks = st.empty()
 
 # Kalau ada dile yang di upload
 df_main = ""
 teks_dari_file = ""
 if uploaded_file is not None:
 
-    try:
+    # try:
+    # st.write(uploaded_file.type)
 
-        if uploaded_file.type == "/txt": ### READ FILE TXT
+    if uploaded_file.type == "text/plain": ### READ FILE TXT
 
-            # Membuka file dan membaca isinya
-            teks_dari_file = ''.join(
-                line.strip() + ' ' for line in uploaded_file.read().decode('utf-8').splitlines()).strip()
+        # Membuka file dan membaca isinya
+        teks_dari_file = ''.join(
+            line.strip() + ' ' for line in uploaded_file.read().decode('utf-8').splitlines()).strip()
 
-        elif uploaded_file.type == "/pdf": ### READ FILE TXT
-            
-            teks_dari_file =""
+    elif uploaded_file.type == "application/pdf": ### READ FILE TXT
 
-            with pdfplumber.open(uploaded_file) as pdf:
-                num_pages = len(pdf.pages)
+        with pdfplumber.open(uploaded_file) as pdf:
+            num_pages = len(pdf.pages)
 
-            # Menampilkan isi setiap halaman
-            for page_num, page in enumerate(pdf.pages):
-                text = page.extract_text()
+        # Menampilkan isi setiap halaman
+        for page_num, page in enumerate(pdf.pages):
+            text = page.extract_text()
 
-                teks_dari_file = teks_dari_file + text
+            teks_dari_file = teks_dari_file + text
 
-                # st.subheader(f"Page {page_num + 1}")
-                # st.text(text)
+            # st.subheader(f"Page {page_num + 1}")
+        teks_dari_file = ''.join(
+            line.strip() + ' ' for line in (teks_dari_file).splitlines()).strip()
 
-    except Exception as e:
+    else:
+        
+        st.write("File tidak berhasil di read")
 
-        st.error(f"Error reading the PDF file: {e}")
+    # except Exception as e:
 
-
-    df_main = get_data_frame(teks_dari_file)
-    placeholder_file.write(df_main)
+    #     st.error(f"Error reading the PDF file: {e}")
     
+    df_main = get_data_frame(teks_dari_file)
+    placeholder_file_teks.write(df_main)
+
     # Menyimpan DataFrame ke file Excel dalam memori
     output = BytesIO()
     with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
@@ -240,6 +244,7 @@ if uploaded_file is not None:
 
 else:
     st.write("Belum ada file yang diunggah.")
+    placeholder_file_teks.empty()
 
 if teks_langsung == '':
 
