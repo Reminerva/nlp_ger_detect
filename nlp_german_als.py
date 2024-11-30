@@ -4,7 +4,7 @@ import streamlit as st
 from io import BytesIO
 import xlsxwriter 
 import base64
-import PyPDF2
+import pdfplumber
 
 # Load spaCy model untuk analisis tata bahasa
 nlp = spacy.load("de_core_news_sm")
@@ -198,15 +198,14 @@ if uploaded_file is not None:
             placeholder_file.write(df_main)
 
         elif uploaded_file.type == "application/pdf": ### READ FILE TXT
+            
+            teks_dari_pdf =""
 
-            pdf_reader = PyPDF2.PdfReader(uploaded_file)
-            num_pages = len(pdf_reader.pages)
-            teks_dari_pdf = ""
+            with pdfplumber.open(uploaded_file) as pdf:
+                num_pages = len(pdf.pages)
 
             # Menampilkan isi setiap halaman
-            for page_num in range(num_pages):
-
-                page = pdf_reader.pages[page_num]
+            for page_num, page in enumerate(pdf.pages):
                 text = page.extract_text()
 
                 teks_dari_pdf = teks_dari_pdf + text
