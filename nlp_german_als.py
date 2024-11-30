@@ -6,6 +6,7 @@ import xlsxwriter
 import base64
 import pdfplumber
 
+
 # Load spaCy model untuk analisis tata bahasa
 nlp = spacy.load("de_core_news_sm")
 nlp.max_length = 2000000
