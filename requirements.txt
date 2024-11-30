@@ -2,7 +2,7 @@ regex==2024.9.11
 spacy==3.7.5
 pandas==2.2.2
 streamlit
+PyPDF2== 3.0.1
 https://github.com/explosion/spacy-models/releases/download/de_core_news_sm-3.8.0/de_core_news_sm-3.8.0.tar.gz
 openpyxl==3.1.5
 xlsxwriter==3.2.0
-PyPDF2 == 3.0.1

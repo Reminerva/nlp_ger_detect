@@ -1,4 +1,3 @@
-import re
 import spacy
 import pandas as pd
 import streamlit as st
