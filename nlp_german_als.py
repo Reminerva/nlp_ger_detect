@@ -27,16 +27,16 @@ def deteksi_perbandingan(teks):
         if 'als ' in kalimat.text.lower(): # Periksa apakah ada 'als
 
             for i, token in enumerate(kalimat): # Iterasi setiap token dalam kalimat
-                
-                if token.text == 'als' and "Cmp" in kalimat[i-1].morph.get("Degree"): # POLA kata komparativ + als
+
+                if token.text == 'als' and kalimat[i-1].tag_ == "ADJD":
 
                     pola_komparatif.append(token)
 
-                elif token.text == 'als' and kalimat[i-2].text == 'mehr': # POLA mehr + 1 kata (bebas) + als
+                if token.text.lower() == 'als' and kalimat[i-1].text.lower() == 'mehr' or kalimat[i-1].text.lower() == 'weniger' :
 
                     pola_komparatif.append(token)
 
-                elif token.text == 'als' and kalimat[i-2].tag_ == "ADV": # POLA Adverbia + 1 kata (bebas) + als
+                if token.text == 'als' and kalimat[i-2].tag_ == "ADJA" or kalimat[i-2].text == 'mehr' or kalimat[i-2].text == 'lieber': # Tag ADJA sbg adjektiv (komparativ) atributif
 
                     pola_komparatif.append(token)
 
@@ -62,17 +62,21 @@ def deteksi_lampau(teks):
 
     for kalimat in corpus.sents: # Iterasi setiap kalimat
 
+        pola_lampau = []
+
         if "als " in kalimat.text.lower(): # Periksa apakah ada "als"
 
-            kata_kerja = []
+            for i, token in enumerate(kalimat):
 
-            for token in kalimat: # Iterasi setiap token dalam kalimat
+                if kalimat[0].text == 'Als'and kalimat[1].pos_ in ["PRON","NOUN"] and token.text == "," and kalimat[i-1].pos_ in ["VERB", "AUX"]:
 
-                if token.pos_ == "VERB" and token.tag_ in ["VVFIN", "VAFIN"]:
+                    pola_lampau.append(token)
+                
+                elif token.text == 'als'and kalimat[i + 1].pos_ in ["PRON","NOUN"] and kalimat[-2].pos_ in ["VERB", "AUX"]:
 
-                    kata_kerja.append(token)
+                    pola_lampau.append(token)
 
-            if len(kata_kerja) > 0: # Pastikan ada kata kerja
+            if len(pola_lampau) > 0: # Pastikan ada kata kerja
 
                 kalimat_lampau.append(kalimat.text)
 
