@@ -5,10 +5,12 @@ import streamlit as st
 from io import BytesIO
 import xlsxwriter 
 import base64
+import PyPDF2
 
 # Load spaCy model untuk analisis tata bahasa
 nlp = spacy.load("de_core_news_sm")
 nlp.max_length = 2000000
+
 
 
 # Fungsi untuk mendeteksi kalimat perbandingan
@@ -127,6 +129,12 @@ def get_img_as_base64(file):
     return base64.b64encode(data).decode()
 
 
+
+
+
+# CODE UNTUK TAMPILAN WEB (USER INTERFACE)
+
+
 img = get_img_as_base64("foto.jpg")
 
 page_bg_img = f"""
@@ -173,35 +181,64 @@ placeholder_langsung = st.empty()
 placeholder_langsung_2 = st.empty()
 
 # Upload file
-uploaded_file = st.file_uploader("Pilih file .txt", type="txt")
+uploaded_file = st.file_uploader("Pilih file .txt", type=["pdf","txt"])
 placeholder_file = st.empty()
 
 # Kalau ada dile yang di upload
 if uploaded_file is not None:
 
-    # Membuka file dan membaca isinya
-    teks_dari_txt = ''.join(
-        line.strip() + ' ' for line in uploaded_file.read().decode('utf-8').splitlines()).strip()
+    try:
 
-    df_main = get_data_frame(teks_dari_txt)
-    placeholder_file.write(df_main)
+        if uploaded_file.type == "application/txt": ### READ FILE TXT
 
-    # Menyimpan DataFrame ke file Excel dalam memori
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-        df_main.to_excel(writer, index=False, sheet_name='Sheet1')
-        # writer.save()
+            # Membuka file dan membaca isinya
+            teks_dari_txt = ''.join(
+                line.strip() + ' ' for line in uploaded_file.read().decode('utf-8').splitlines()).strip()
 
-    # Mendapatkan data file Excel
-    excel_data = output.getvalue()
+            df_main = get_data_frame(teks_dari_txt)
+            placeholder_file.write(df_main)
 
-    # Tombol untuk mengunduh file Excel
-    placeholder_file.download_button(
-        label="Download File Excel",
-        data=excel_data,
-        file_name="Hasil deteksi.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+        elif uploaded_file.type == "application/pdf": ### READ FILE TXT
+
+            pdf_reader = PyPDF2.PdfReader(uploaded_file)
+            num_pages = len(pdf_reader.pages)
+            teks_dari_pdf = ""
+
+            # Menampilkan isi setiap halaman
+            for page_num in range(num_pages):
+
+                page = pdf_reader.pages[page_num]
+                text = page.extract_text()
+
+                teks_dari_pdf = teks_dari_pdf + text
+
+            df_main = get_data_frame(teks_dari_pdf)
+            placeholder_file.write(df_main)
+
+                # st.subheader(f"Page {page_num + 1}")
+                # st.text(text)
+
+        # Menyimpan DataFrame ke file Excel dalam memori
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df_main.to_excel(writer, index=False, sheet_name='Sheet1')
+            # writer.save()
+
+        # Mendapatkan data file Excel
+        excel_data = output.getvalue()
+
+        # Tombol untuk mengunduh file Excel
+        placeholder_file.download_button(
+            label="Download File Excel",
+            data=excel_data,
+            file_name="Hasil deteksi.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+
+
+    except Exception as e:
+
+        st.error(f"Error reading the PDF file: {e}")
 
 else:
     st.write("Belum ada file yang diunggah.")
