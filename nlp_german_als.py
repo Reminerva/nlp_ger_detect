@@ -122,25 +122,14 @@ def get_img_as_base64(file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-img = get_img_as_base64("wallpaperflare.com_wallpaper.jpg")
 
-# page_bg_img = f"""
-# <style>
+img = get_img_as_base64("foto.jpg")
 
-# [data-testid="stAppViewContainer"] {{
-# background-image: url("data:image/png;base64,{img}");
-# background-position: center; 
-# background-repeat: no-repeat;
-# background-attachment: fixed;
-# }}
-
-# </style>
-# """
 page_bg_img = f"""
 <style>
 
 [data-testid="stAppViewContainer"] {{
-background-color: white;
+background-image: url("data:image/png;base64,{img}");
 background-position: center; 
 background-repeat: no-repeat;
 background-attachment: fixed;
@@ -148,6 +137,18 @@ background-attachment: fixed;
 
 </style>
 """
+# page_bg_img = f"""
+# <style>
+
+# [data-testid="stAppViewContainer"] {{
+# background-color: white;
+# background-position: center; 
+# background-repeat: no-repeat;
+# background-attachment: fixed;
+# }}
+
+# </style>
+# """
 
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
