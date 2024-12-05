@@ -201,9 +201,9 @@ with st.sidebar:
     st.markdown(
     """
     <style>
-    section.st-emotion-cache-vmpjyt {
+    .st-emotion-cache-1wqrzgl {
         min-width: 0px; /* Atur lebar minimum sidebar */
-        max-width: 360px; /* Atur lebar maksimum sidebar */
+        max-width: 325px; /* Atur lebar maksimum sidebar */
     } 
     </style>
     """,
@@ -213,7 +213,7 @@ with st.sidebar:
     st.markdown(
     """
     <style>
-    section.st-emotion-cache-dg4gqi {
+    .st-emotion-cache-ndc0ks {
         min-width: 310px; /* Atur lebar minimum sidebar */
         max-width: 310px; /* Atur lebar maksimum sidebar */
     }
