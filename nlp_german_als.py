@@ -189,6 +189,17 @@ def get_img_as_base64(file):
 #     unsafe_allow_html=True
 # )
 
+# Load and resize the image
+img_path = "./images/foto sidebar.jpeg"
+img = Image.open(img_path)
+sidebar_width = 310  # Sesuaikan dengan lebar sidebar
+aspect_ratio = img.height / img.width
+new_height = int(sidebar_width * aspect_ratio)
+resized_img = img.resize((sidebar_width, new_height))
+
+# Save the resized image
+resized_img.save("./images/resized_sidebar.jpeg")
+
 st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
 # st.header('Proyek Data Analisis :sparkles:')
 st.caption('Created by: ')
@@ -221,7 +232,7 @@ with st.sidebar:
     """,
     unsafe_allow_html=True)
 
-    img = get_img_as_base64("./images/foto sidebar.jpeg")
+    img = get_img_as_base64("./images/resized_sidebar.jpeg")
 
     page_bg_img = f"""
     <style>
