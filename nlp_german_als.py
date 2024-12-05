@@ -5,6 +5,7 @@ from io import BytesIO
 import xlsxwriter 
 import base64
 import pdfplumber
+from PIL import Image
 
 
 # Load spaCy model untuk analisis tata bahasa
@@ -135,20 +136,20 @@ def get_img_as_base64(file):
 
 # CODE UNTUK TAMPILAN WEB (USER INTERFACE)
 
-img = get_img_as_base64("foto.jpg")
+# img = get_img_as_base64("./images/foto sidebar.jpeg")
 
-page_bg_img = f"""
-<style>
+# page_bg_img = f"""
+# <style>
 
-[data-testid="stAppViewContainer"] {{
-background-image: url("data:image/png;base64,{img}");
-background-position: center; 
-background-repeat: no-repeat;
-background-attachment: fixed;
-}}
+# [data-testid="stAppViewContainer"] {{
+# background-image: url("data:image/png;base64,{img}");
+# background-position: center; 
+# background-repeat: no-repeat;
+# background-attachment: fixed;
+# }}
 
-</style>
-"""
+# </style>
+# """
 # page_bg_img = f"""
 # <style>
 
@@ -162,8 +163,31 @@ background-attachment: fixed;
 # </style>
 # """
 
-st.markdown(page_bg_img, unsafe_allow_html=True)
+# st.markdown(page_bg_img, unsafe_allow_html=True)
 
+st.markdown(
+    """
+    <style>
+    ."stSidebar st-emotion-cache-1nn8vdb eczjsme18"] {
+        min-width: 0px; /* Atur lebar minimum sidebar */
+        max-width: 350px; /* Atur lebar maksimum sidebar */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    """
+    <style>
+    ."stSidebar st-emotion-cache-6wo8z7 eczjsme18"] {
+        min-width: 350px; /* Atur lebar minimum sidebar */
+        max-width: 350px; /* Atur lebar maksimum sidebar */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
 # st.header('Proyek Data Analisis :sparkles:')
@@ -171,7 +195,24 @@ st.caption('Created by: ')
 
 with st.sidebar:
     
-    st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
+    st.title('Kalimat Perbandingan dan Lampau :sparkles:')
+    
+
+    img = get_img_as_base64("./images/foto sidebar.jpeg")
+
+    page_bg_img = f"""
+    <style>
+    [data-testid="stSidebarContent"] {{
+        background-image: url("data:image/png;base64,{img}");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: contain; /* Bisa juga diganti dengan contain */
+    }}
+    </style>
+    """
+
+    st.markdown(page_bg_img, unsafe_allow_html=True)
+
     # Menambahkan logo perusahaan
     # st.image("https://learn.g2.com/hubfs/Imported%20sitepage%20images/1ZB5giUShe0gw9a6L69qAgsd7wKTQ60ZRoJC5Xq3BIXS517sL6i6mnkAN9khqnaIGzE6FASAusRr7w=w1439-h786.png")
 
