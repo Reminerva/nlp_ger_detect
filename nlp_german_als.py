@@ -165,29 +165,29 @@ def get_img_as_base64(file):
 
 # st.markdown(page_bg_img, unsafe_allow_html=True)
 
-st.markdown(
-    """
-    <style>
-    ."stSidebar st-emotion-cache-1nn8vdb eczjsme18"] {
-        min-width: 0px; /* Atur lebar minimum sidebar */
-        max-width: 350px; /* Atur lebar maksimum sidebar */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# st.markdown(
+#     """
+#     <style>
+#     ."stSidebar st-emotion-cache-1nn8vdb eczjsme18"] {
+#         min-width: 0px; /* Atur lebar minimum sidebar */
+#         max-width: 350px; /* Atur lebar maksimum sidebar */
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True
+# )
 
-st.markdown(
-    """
-    <style>
-    ."stSidebar st-emotion-cache-6wo8z7 eczjsme18"] {
-        min-width: 350px; /* Atur lebar minimum sidebar */
-        max-width: 350px; /* Atur lebar maksimum sidebar */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# st.markdown(
+#     """
+#     <style>
+#     ."stSidebar st-emotion-cache-6wo8z7 eczjsme18"] {
+#         min-width: 350px; /* Atur lebar minimum sidebar */
+#         max-width: 350px; /* Atur lebar maksimum sidebar */
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True
+# )
 
 st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
 # st.header('Proyek Data Analisis :sparkles:')
@@ -196,7 +196,30 @@ st.caption('Created by: ')
 with st.sidebar:
     
     st.title('Kalimat Perbandingan dan Lampau :sparkles:')
+
+    # Sidebar di pc
+    st.markdown(
+    """
+    <style>
+    section.st-emotion-cache-vmpjyt {
+        min-width: 0px; /* Atur lebar minimum sidebar */
+        max-width: 360px; /* Atur lebar maksimum sidebar */
+    } 
+    </style>
+    """,
+    unsafe_allow_html=True)
     
+    # Sidebar di hp
+    st.markdown(
+    """
+    <style>
+    section.st-emotion-cache-dg4gqi {
+        min-width: 310px; /* Atur lebar minimum sidebar */
+        max-width: 310px; /* Atur lebar maksimum sidebar */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True)
 
     img = get_img_as_base64("./images/foto sidebar.jpeg")
 
