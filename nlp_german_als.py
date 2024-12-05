@@ -202,7 +202,7 @@ with st.sidebar:
     """
     <style>
     .st-emotion-cache-1wqrzgl {
-        min-width: 0px; /* Atur lebar minimum sidebar */
+        min-width: 325px; /* Atur lebar minimum sidebar */
         max-width: 325px; /* Atur lebar maksimum sidebar */
     } 
     </style>
