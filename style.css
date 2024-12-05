@@ -1,0 +1,10 @@
+@font-face {
+  @font-face {
+    font-family: 'LaBelleAurore-Regular';
+    src: url('fonts/LaBelleAurore-Regular.ttf') format('truetype');
+  }
+
+  body {
+    font-family: 'LaBelleAurore-Regular', cursive;
+  }
+}

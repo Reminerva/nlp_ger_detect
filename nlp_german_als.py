@@ -136,71 +136,25 @@ def get_img_as_base64(file):
 
 # CODE UNTUK TAMPILAN WEB (USER INTERFACE)
 
-# img = get_img_as_base64("./images/foto sidebar.jpeg")
+## Ganti Font
 
-# page_bg_img = f"""
-# <style>
+st.markdown(
+    """
+    <style>
+    @font-face {
+      font-family: 'LaBelleAurore-Regular';
+      src: url('fonts/LaBelleAurore-Regular.ttf') format('truetype');
+    }
 
-# [data-testid="stAppViewContainer"] {{
-# background-image: url("data:image/png;base64,{img}");
-# background-position: center; 
-# background-repeat: no-repeat;
-# background-attachment: fixed;
-# }}
-
-# </style>
-# """
-# page_bg_img = f"""
-# <style>
-
-# [data-testid="stAppViewContainer"] {{
-# background-color: white;
-# background-position: center; 
-# background-repeat: no-repeat;
-# background-attachment: fixed;
-# }}
-
-# </style>
-# """
-
-# st.markdown(page_bg_img, unsafe_allow_html=True)
-
-# st.markdown(
-#     """
-#     <style>
-#     ."stSidebar st-emotion-cache-1nn8vdb eczjsme18"] {
-#         min-width: 0px; /* Atur lebar minimum sidebar */
-#         max-width: 350px; /* Atur lebar maksimum sidebar */
-#     }
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-# )
-
-# st.markdown(
-#     """
-#     <style>
-#     ."stSidebar st-emotion-cache-6wo8z7 eczjsme18"] {
-#         min-width: 350px; /* Atur lebar minimum sidebar */
-#         max-width: 350px; /* Atur lebar maksimum sidebar */
-#     }
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-# )
-
-# Load and resize the image
-img_path = "./images/foto sidebar.jpeg"
-img = Image.open(img_path)
-sidebar_width = 310  # Sesuaikan dengan lebar sidebar
-aspect_ratio = img.height / img.width
-new_height = int(sidebar_width * aspect_ratio)
-resized_img = img.resize((sidebar_width, new_height))
-
-# Save the resized image
-resized_img.save("./images/resized_sidebar.jpeg")
-
-st.title('Detector Kalimat Perbandingan dan Lampau :sparkles:')
+    body {
+      font-family: 'LaBelleAurore-Regular', cursive;
+    }
+    </style>
+    """, 
+    unsafe_allow_html=True
+)
+st.title('Ini adalah aplikasi Streamlit dengan Font Kustom')
+st.title('Deteksi Kalimat Perbandingan dan Lampau')
 # st.header('Proyek Data Analisis :sparkles:')
 st.caption('Created by: ')
 
@@ -220,19 +174,8 @@ with st.sidebar:
     """,
     unsafe_allow_html=True)
     
-    # Sidebar di hp
-    st.markdown(
-    """
-    <style>
-    .st-emotion-cache-ndc0ks {
-        min-width: 310px; /* Atur lebar minimum sidebar */
-        max-width: 310px; /* Atur lebar maksimum sidebar */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True)
 
-    img = get_img_as_base64("./images/resized_sidebar.jpeg")
+    img = get_img_as_base64("./images/foto sidebar.jpeg")
 
     page_bg_img = f"""
     <style>
@@ -263,6 +206,7 @@ placeholder_file_teks = st.empty()
 # Kalau ada dile yang di upload
 df_main = ""
 teks_dari_file = ""
+
 if uploaded_file is not None:
 
     # try:
