@@ -308,7 +308,7 @@ page_bg_img = f"""
 [data-testid="stAppViewContainer"] {{
 background-image: url("data:image/png;base64,{get_img_as_base64("./images/Ghibli2.jpg")}");
 background-size: cover;
-background-position: top left; 
+background-position: top middle; 
 background-repeat: no-repeat;
 background-attachment: fixed;
 }}
