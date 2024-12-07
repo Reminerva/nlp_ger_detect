@@ -136,51 +136,19 @@ def get_img_as_base64(file):
 
 # CODE UNTUK TAMPILAN WEB (USER INTERFACE)
 
-## Ganti Font
-
-st.markdown(
-    """
-    <style>
-    @font-face {
-      font-family: 'LaBelleAurore-Regular';
-      src: url('fonts/LaBelleAurore-Regular.ttf') format('truetype');
-    }
-
-    body {
-      font-family: 'LaBelleAurore-Regular', cursive;
-    }
-    </style>
-    """, 
-    unsafe_allow_html=True
-)
-st.title('Ini adalah aplikasi Streamlit dengan Font Kustom')
-st.title('Deteksi Kalimat Perbandingan dan Lampau')
-# st.header('Proyek Data Analisis :sparkles:')
-st.caption('Created by: ')
 
 with st.sidebar:
     
-    st.title('Kalimat Perbandingan dan Lampau :sparkles:')
+    st.title('Kalima Perbandingan dan Lampau :sparkles:')
 
-    # Sidebar di pc
-    st.markdown(
-    """
-    <style>
-    .st-emotion-cache-1wqrzgl {
-        min-width: 325px; /* Atur lebar minimum sidebar */
-        max-width: 325px; /* Atur lebar maksimum sidebar */
-    } 
-    </style>
-    """,
-    unsafe_allow_html=True)
-    
-
-    img = get_img_as_base64("./images/foto sidebar.jpeg")
+    img = get_img_as_base64("foto sidebar.jpeg")
 
     page_bg_img = f"""
     <style>
-    [data-testid="stSidebarContent"] {{
+    [data-testid="stSidebar"] {{
         background-image: url("data:image/png;base64,{img}");
+        background-size: cover;
+        background-position: top left; 
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: contain; /* Bisa juga diganti dengan contain */
@@ -190,108 +158,175 @@ with st.sidebar:
 
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-    # Menambahkan logo perusahaan
-    # st.image("https://learn.g2.com/hubfs/Imported%20sitepage%20images/1ZB5giUShe0gw9a6L69qAgsd7wKTQ60ZRoJC5Xq3BIXS517sL6i6mnkAN9khqnaIGzE6FASAusRr7w=w1439-h786.png")
 
-# Kotak kosong buat diisi
-teks_langsung = st.text_input("Masukkan teks:")
-placeholder_langsung = st.empty()
-placeholder_langsung_2 = st.empty()
 
-# Upload file
-uploaded_file = st.file_uploader("Pilih file .txt", type=["txt","pdf"])
-placeholder_file = st.empty()
-placeholder_file_teks = st.empty()
+with st.container():
 
-# Kalau ada dile yang di upload
-df_main = ""
-teks_dari_file = ""
+    st.title('Deteksi Kalimat Perbandingan dan Lampau')
+    st.caption('Created by: ')
 
-if uploaded_file is not None:
+    # Kotak kosong buat diisi
+    teks_langsung = st.text_area("Masukkan teks:", height=10)
+    placeholder_langsung = st.empty()
+    placeholder_langsung_2 = st.empty()
 
-    # try:
-    # st.write(uploaded_file.type)
+    # Upload file
+    uploaded_file = st.file_uploader("Pilih file .txt", type=["txt","pdf"])
+    placeholder_file = st.empty()
+    placeholder_file_teks = st.empty()
 
-    if uploaded_file.type == "text/plain": ### READ FILE TXT
+    # Kalau ada dile yang di upload
+    df_main = ""
+    teks_dari_file = ""
+    if uploaded_file is not None:
 
-        # Membuka file dan membaca isinya
-        teks_dari_file = ''.join(
-            line.strip() + ' ' for line in uploaded_file.read().decode('utf-8').splitlines()).strip()
+        # try:
+        # st.write(uploaded_file.type)
 
-    elif uploaded_file.type == "application/pdf": ### READ FILE TXT
+        if uploaded_file.type == "text/plain": ### READ FILE TXT
 
-        with pdfplumber.open(uploaded_file) as pdf:
-            num_pages = len(pdf.pages)
+            # Membuka file dan membaca isinya
+            teks_dari_file = ''.join(
+                line.strip() + ' ' for line in uploaded_file.read().decode('utf-8').splitlines()).strip()
 
-        # Menampilkan isi setiap halaman
-        for page_num, page in enumerate(pdf.pages):
-            text = page.extract_text()
+        elif uploaded_file.type == "application/pdf": ### READ FILE TXT
 
-            teks_dari_file = teks_dari_file + text
+            with pdfplumber.open(uploaded_file) as pdf:
+                num_pages = len(pdf.pages)
 
-            # st.subheader(f"Page {page_num + 1}")
-        teks_dari_file = ''.join(
-            line.strip() + ' ' for line in (teks_dari_file).splitlines()).strip()
+            # Menampilkan isi setiap halaman
+            for page_num, page in enumerate(pdf.pages):
+                text = page.extract_text()
+
+                teks_dari_file = teks_dari_file + text
+
+                # st.subheader(f"Page {page_num + 1}")
+            teks_dari_file = ''.join(
+                line.strip() + ' ' for line in (teks_dari_file).splitlines()).strip()
+
+        else:
+            
+            st.write("File tidak berhasil di read")
+
+        # except Exception as e:
+
+        #     st.error(f"Error reading the PDF file: {e}")
+        
+        df_main = get_data_frame(teks_dari_file)
+        placeholder_file_teks.write(df_main)
+
+        # Menyimpan DataFrame ke file Excel dalam memori
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df_main.to_excel(writer, index=False, sheet_name='Sheet1')
+            # writer.save()
+
+        # Mendapatkan data file Excel
+        excel_data = output.getvalue()
+
+        # Tombol untuk mengunduh file Excel
+        placeholder_file.download_button(
+            label="Download File Excel",
+            data=excel_data,
+            file_name="Hasil deteksi.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
 
     else:
-        
-        st.write("File tidak berhasil di read")
+        st.write("Belum ada file yang diunggah.")
+        placeholder_file_teks.empty()
 
-    # except Exception as e:
+    if teks_langsung == '':
 
-    #     st.error(f"Error reading the PDF file: {e}")
-    
-    df_main = get_data_frame(teks_dari_file)
-    placeholder_file_teks.write(df_main)
+        placeholder_langsung.empty()
 
-    # Menyimpan DataFrame ke file Excel dalam memori
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-        df_main.to_excel(writer, index=False, sheet_name='Sheet1')
-        # writer.save()
+    else:
 
-    # Mendapatkan data file Excel
-    excel_data = output.getvalue()
+        df_main = get_data_frame(teks_langsung)
+        placeholder_langsung.dataframe(df_main)
 
-    # Tombol untuk mengunduh file Excel
-    placeholder_file.download_button(
-        label="Download File Excel",
-        data=excel_data,
-        file_name="Hasil deteksi.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+        # Menyimpan DataFrame ke file Excel dalam memori
+        output = BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df_main.to_excel(writer, index=False, sheet_name='Sheet1')
+            # writer.save()
 
-else:
-    st.write("Belum ada file yang diunggah.")
-    placeholder_file_teks.empty()
+        # Mendapatkan data file Excel
+        excel_data = output.getvalue()
 
-if teks_langsung == '':
+        # Tombol untuk mengunduh file Excel
+        placeholder_langsung_2.download_button(
+            label="Download File Excel",
+            data=excel_data,
+            file_name="Hasil deteksi.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
 
-    placeholder_langsung.empty()
+    if st.button("Hapus Semua Output"):
+        placeholder_langsung.empty()
+        placeholder_file.empty()
+        placeholder_langsung_2.empty()
 
-else:
+# IMPORT FONT DARI GITHUB PAGES
+st.html(
+    f"""
+    <style>
+    @font-face {{
+        font-family: "Royal Avenue";
+        src: url('https://reminerva.github.io/royal-avenue-demo.ttf') format("truetype");
+    }}
+    </style>
+    """
+)
+st.html(
+    f"""
+    <style>
+    @font-face {{
+        font-family: "Source Sans Pro";
+        src: url('https://reminerva.github.io/royal-avenue-demo.ttf') format("truetype");
+    }}
+    </style>
+    """
+)
 
-    df_main = get_data_frame(teks_langsung)
-    placeholder_langsung.dataframe(df_main)
+### Ubah font h1
 
-    # Menyimpan DataFrame ke file Excel dalam memori
-    output = BytesIO()
-    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
-        df_main.to_excel(writer, index=False, sheet_name='Sheet1')
-        # writer.save()
+st.html(
+    """
+    <style>
+    h1 {
+        font-family: "Royal Avenue", cursive;
+        background: rgba(255,255,255,0);
+    }
+    </style>
+    """
+)
 
-    # Mendapatkan data file Excel
-    excel_data = output.getvalue()
+### Background Image
+page_bg_img = f"""
+<style>
 
-    # Tombol untuk mengunduh file Excel
-    placeholder_langsung_2.download_button(
-        label="Download File Excel",
-        data=excel_data,
-        file_name="Hasil deteksi.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+[data-testid="stAppViewContainer"] {{
+background-image: url("data:image/png;base64,{get_img_as_base64("Ghibli2.jpg")}");
+background-size: cover;
+background-position: top left; 
+background-repeat: no-repeat;
+background-attachment: fixed;
+}}
+"""
 
-if st.button("Hapus Semua Output"):
-    placeholder_langsung.empty()
-    placeholder_file.empty()
-    placeholder_langsung_2.empty()
+st.html(page_bg_img)
+
+### Ubah BACKGROUND SATU CONTAINER
+stc.html(
+    """
+    <script>
+    const container = window.parent.document.querySelectorAll("div.stVerticalBlock");
+    container[1].style.backgroundColor = 'rgba(200, 200, 200, 0.6)';
+    container[1].style.borderRadius = '10px';
+    container[1].style.border = '2px solid #fff';
+    </script>
+    """,
+    height=0,
+    width=0,
+)
