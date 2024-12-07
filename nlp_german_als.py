@@ -136,7 +136,6 @@ def get_img_as_base64(file):
 
 # CODE UNTUK TAMPILAN WEB (USER INTERFACE)
 
-
 with st.sidebar:
     
     st.title('Kalima Perbandingan dan Lampau :sparkles:')
