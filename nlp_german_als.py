@@ -1,6 +1,7 @@
 import spacy
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 from io import BytesIO
 import xlsxwriter 
 import base64
@@ -140,7 +141,7 @@ with st.sidebar:
     
     st.title('Kalima Perbandingan dan Lampau :sparkles:')
 
-    img = get_img_as_base64("foto sidebar.jpeg")
+    img = get_img_as_base64("./images/foto sidebar.jpeg")
 
     page_bg_img = f"""
     <style>
@@ -165,7 +166,7 @@ with st.container():
     st.caption('Created by: ')
 
     # Kotak kosong buat diisi
-    teks_langsung = st.text_area("Masukkan teks:", height=10)
+    teks_langsung = st.text_area("Masukkan teks:", height=200)
     placeholder_langsung = st.empty()
     placeholder_langsung_2 = st.empty()
 
@@ -289,7 +290,6 @@ st.html(
 )
 
 ### Ubah font h1
-
 st.html(
     """
     <style>
@@ -306,7 +306,7 @@ page_bg_img = f"""
 <style>
 
 [data-testid="stAppViewContainer"] {{
-background-image: url("data:image/png;base64,{get_img_as_base64("Ghibli2.jpg")}");
+background-image: url("data:image/png;base64,{get_img_as_base64("./images/Ghibli2.jpg")}");
 background-size: cover;
 background-position: top left; 
 background-repeat: no-repeat;
@@ -317,7 +317,7 @@ background-attachment: fixed;
 st.html(page_bg_img)
 
 ### Ubah BACKGROUND SATU CONTAINER
-stc.html(
+components.html(
     """
     <script>
     const container = window.parent.document.querySelectorAll("div.stVerticalBlock");
