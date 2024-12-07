@@ -137,26 +137,26 @@ def get_img_as_base64(file):
 
 # CODE UNTUK TAMPILAN WEB (USER INTERFACE)
 
-with st.sidebar:
+# with st.sidebar:
     
-    st.title('Kalima Perbandingan dan Lampau :sparkles:')
+#     st.title('Kalima Perbandingan dan Lampau :sparkles:')
 
-    img = get_img_as_base64("./images/foto sidebar.jpeg")
+#     img = get_img_as_base64("./images/foto sidebar.jpeg")
 
-    page_bg_img = f"""
-    <style>
-    [data-testid="stSidebar"] {{
-        background-image: url("data:image/png;base64,{img}");
-        background-size: cover;
-        background-position: top left; 
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: contain; /* Bisa juga diganti dengan contain */
-    }}
-    </style>
-    """
+#     page_bg_img = f"""
+#     <style>
+#     [data-testid="stSidebar"] {{
+#         background-image: url("data:image/png;base64,{img}");
+#         background-size: cover;
+#         background-position: center left; 
+#         background-repeat: no-repeat;
+#         background-attachment: fixed;
+#         background-size: contain; /* Bisa juga diganti dengan contain */
+#     }}
+#     </style>
+#     """
 
-    st.markdown(page_bg_img, unsafe_allow_html=True)
+#     st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
 
@@ -308,7 +308,7 @@ page_bg_img = f"""
 [data-testid="stAppViewContainer"] {{
 background-image: url("data:image/png;base64,{get_img_as_base64("./images/Ghibli2.jpg")}");
 background-size: cover;
-background-position: top middle; 
+background-position: top center; 
 background-repeat: no-repeat;
 background-attachment: fixed;
 }}
